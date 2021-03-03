@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\UserInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\DBService;
+use App\Http\Requests\UserCommonInfoUpdateRequest;
 
 class UserController extends Controller
 {   
@@ -114,13 +116,28 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  App\Http\Requests\UserCommonInfoUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function commonInfoUpdate(UserCommonInfoUpdateRequest $request, $id)
     {
-        //
+        $user = $this->user->find($id);
+        $user->name = $request->name;
+        $user->info->job = $request->job;
+        $user->info->phone = $request->phone;
+        $user->info->address = $request->address;
+
+        $savedUser = $user->save();
+        $savedInfo = $user->info->save();
+
+        if ($savedUser) {
+            return back()
+                ->with('success', 'Данные обновлены');
+        } else {
+            return back()
+                ->withErrors('Ошибка обновления');
+        }
     }
 
     /**

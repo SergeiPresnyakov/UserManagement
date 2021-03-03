@@ -28,7 +28,7 @@ class DBService
     {
         return DB::table('users')
             ->join('users_info', 'users.id', '=', 'users_info.user_id')
-            ->select(['name', 'job', 'phone', 'address'])
+            ->select(['users.id', 'name', 'job', 'phone', 'address'])
             ->where('users.id', $id)
             ->first();
     }

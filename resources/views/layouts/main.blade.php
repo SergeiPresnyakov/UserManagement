@@ -36,6 +36,7 @@
                 </ul>
             </div>
         </nav>
+        
         @yield('content')
         @yield('footer')
     </body>
