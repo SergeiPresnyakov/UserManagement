@@ -5,9 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Services\DBService;
 
 class UserController extends Controller
-{
+{   
+    /**
+     * @var App\Services\DBService $db
+     */
+    private $db;
+
+    public function __construct(DBService $db)
+    {
+        $this->db = $db;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -27,7 +38,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('forms.create');
     }
 
     /**
@@ -60,7 +71,24 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('forms.edit');
+    }
+
+    public function security($id)
+    {
+        return view('forms.security');
+    }
+
+    public function status($id)
+    {
+        return view('forms.status');
+    }
+
+    public function media($id)
+    {
+        $avatar = ($this->db->getUserAvatar($id))->avatar;
+
+        return view('forms.media', compact('avatar'));
     }
 
     /**
