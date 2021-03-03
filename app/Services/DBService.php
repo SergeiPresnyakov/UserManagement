@@ -11,6 +11,34 @@ class DBService
         return DB::table('users')
             ->select('avatar')
             ->where('id', $id)
+            ->first()
+            ->avatar;
+    }
+
+    public function getUserStatus($id)
+    {
+        return DB::table('users')
+            ->select('status')
+            ->where('id', $id)
+            ->first()
+            ->status;
+    }
+
+    public function getForEdit($id)
+    {
+        return DB::table('users')
+            ->join('users_info', 'users.id', '=', 'users_info.user_id')
+            ->select(['name', 'job', 'phone', 'address'])
+            ->where('users.id', $id)
             ->first();
+    }
+
+    public function getForSecurity($id)
+    {
+        return DB::table('users')
+            ->select('email')
+            ->where('id', $id)
+            ->first()
+            ->email;
     }
 }

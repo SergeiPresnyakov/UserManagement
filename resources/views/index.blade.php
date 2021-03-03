@@ -50,7 +50,9 @@
                                 <span class="status status-danger mr-3">
                                 @break
                             @endswitch
-                                <span class="rounded-circle profile-image d-block " style="background-image:url({{ asset($user->avatar) }}); background-size: cover;"></span>
+                                <a href="{{ route('user.profile', ['id' => $user->id]) }}">
+                                    <span class="rounded-circle profile-image d-block " style="background-image:url({{ asset($user->avatar) }}); background-size: cover;"></span>
+                                </a>  
                             </span>
                             <div class="info-card-text flex-1">
                                 <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">

@@ -8,6 +8,14 @@
             </h1>
 
         </div>
+
+        @php
+            $statuses = [
+                'Онлайн' => 'online',
+                'Отошёл' => 'away',
+                'Не беспокоить' => 'busy'
+            ];
+        @endphp
         <form action="">
             <div class="row">
                 <div class="col-xl-6">
@@ -23,9 +31,9 @@
                                         <div class="form-group">
                                             <label class="form-label" for="example-select">Выберите статус</label>
                                             <select class="form-control" id="example-select">
-                                                <option>Онлайн</option>
-                                                <option>Отошел</option>
-                                                <option>Не беспокоить</option>
+                                                @foreach($statuses as $statusName => $statusValue)
+                                                <option value="{{ $statusValue }}" @if($statusValue == $currentStatus) selected @endif>{{ $statusName }}</option>
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>

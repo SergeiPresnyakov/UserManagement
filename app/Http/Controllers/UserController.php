@@ -10,13 +10,25 @@ use App\Services\DBService;
 class UserController extends Controller
 {   
     /**
-     * @var App\Services\DBService $db
+     * Набор подготовленных запросов,
+     * чтобы подтягивать из БД
+     * только то, что нужно.
+     * Например не доставать весь объект User
+     * ради одной аватарки.
+     * 
+     * @var App\Services\DBService
      */
     private $db;
 
-    public function __construct(DBService $db)
+    /**
+     * @var App\Models\User
+     */
+    private $user;
+
+    public function __construct(DBService $db, User $user)
     {
         $this->db = $db;
+        $this->user = $user;
     }
 
     /**
@@ -26,7 +38,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::paginate(6);
+        $users = $this->user->paginate(6);
 
         return view('index', compact('users'));
     }
@@ -60,7 +72,9 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = $this->user->find($id);
+
+        return view('profile', compact('user'));
     }
 
     /**
@@ -71,22 +85,28 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        return view('forms.edit');
+        $user = $this->db->getForEdit($id);
+
+        return view('forms.edit', compact('user'));
     }
 
     public function security($id)
     {
-        return view('forms.security');
+        $email = $this->db->getForSecurity($id);
+
+        return view('forms.security', compact('email'));
     }
 
     public function status($id)
     {
-        return view('forms.status');
+        $currentStatus = $this->db->getUserStatus($id);
+
+        return view('forms.status', compact('currentStatus'));
     }
 
     public function media($id)
     {
-        $avatar = ($this->db->getUserAvatar($id))->avatar;
+        $avatar = $this->db->getUserAvatar($id);
 
         return view('forms.media', compact('avatar'));
     }

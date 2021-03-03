@@ -21,6 +21,7 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/register', [AuthController::class, 'create'])->name('user.register');
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'auth'])->name('user.login');
+Route::get('user/{id}/profile', [UserController::class, 'show'])->name('user.profile');
 
 // Только авторизованному пользователю
 Route::group(['middleware' => 'auth', 'prefix' => 'user'], function () {
