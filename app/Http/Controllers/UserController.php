@@ -64,9 +64,9 @@ class UserController extends Controller
      */
     public function security($id)
     {
-        $user = $this->db->getForSecurity($id);
+        $email = $this->db->getUserEmail($id);
 
-        return view('forms.security', compact('user'));
+        return view('forms.security', compact('email', 'id'));
     }
 
     /**
@@ -78,7 +78,7 @@ class UserController extends Controller
     {
         $currentStatus = $this->db->getUserStatus($id);
 
-        return view('forms.status', compact('currentStatus'));
+        return view('forms.status', compact('currentStatus', 'id'));
     }
 
     /**
@@ -173,6 +173,24 @@ class UserController extends Controller
             return back()->with('success', 'Учётные данные обновлены');
         } else {
             return back()->withErrors('Не удалось обновить учётные данные');
+        }
+    }
+
+    /**
+     * Set user status
+     * 
+     * @param Illuminate\Http\Request $request
+     * @param int $id User ID
+     */
+    public function setStatus(Request $request, $id)
+    {
+        $user = $this->user->find($id);
+        $isUpdated = $user->update(['status' => $request->status]);
+
+        if ($isUpdated) {
+            return back()->with('success', 'Статус обновлён');
+        } else {
+            return back()->withErrors('Не удалось сменить статус');
         }
     }
 

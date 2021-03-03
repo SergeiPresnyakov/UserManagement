@@ -33,11 +33,12 @@ class DBService
             ->first();
     }
 
-    public function getForSecurity($id)
+    public function getUserEmail($id)
     {
         return DB::table('users')
-            ->select('id', 'email')
+            ->select('email')
             ->where('id', $id)
-            ->first();
+            ->first()
+            ->email;
     }
 }

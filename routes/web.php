@@ -29,6 +29,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function () {
     Route::get('{id}/edit', [UserController::class, 'edit'])->name('user.edit');
     Route::get('{id}/security', [UserController::class, 'security'])->name('user.security');
     Route::get('{id}/status', [UserController::class, 'status'])->name('user.status');
+    Route::patch('{id}/status/update', [UserController::class, 'setStatus'])->name('user.status.update');
     Route::get('{id}/media', [UserController::class, 'media'])->name('user.media');
     Route::patch('{id}/commoninfo/update', [UserController::class, 'commonInfoUpdate'])->name('user.commoninfo.update');
     Route::patch('{id}/security/update', [UserController::class, 'securityUpdate'])->name('user.security.update');
