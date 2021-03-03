@@ -6,6 +6,7 @@ use App\Http\Requests\UserAuthRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Models\User;
 use App\Models\UserInfo;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -60,5 +61,14 @@ class AuthController extends Controller
 
         return back()
             ->withErrors('Неверный email или пароль');
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 }

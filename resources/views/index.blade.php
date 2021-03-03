@@ -10,7 +10,7 @@
             </div>
             <div class="row">
                 <div class="col-xl-12">
-                    @if($isAdmin)
+                    @if(Auth::check() && Auth::user()->admin)
                     <a class="btn btn-success" href="create_user.html">Добавить</a>
                     @endif
 
@@ -31,8 +31,7 @@
 
                 @foreach($users as $user)
                 @php
-                    $allowToSeeOptions = Auth::check() && 
-                                        Auth::user()->id == $user->id;
+                    $allowToSeeOptions = Auth::check() && (Auth::user()->id == $user->id || Auth::user()->admin);
                 @endphp
                 <div class="col-xl-4">
                     <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="oliver kopyov">
@@ -51,7 +50,7 @@
                                     <span class="status status-danger mr-3">
                                     @break
                                 @endswitch
-                                    <span class="rounded-circle profile-image d-block " style="background-image:url({{$user->info->avatar}}); background-size: cover;"></span>
+                                    <span class="rounded-circle profile-image d-block " style="background-image:url({{ asset($user->avatar) }}); background-size: cover;"></span>
                                 </span>
                                 <div class="info-card-text flex-1">
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">

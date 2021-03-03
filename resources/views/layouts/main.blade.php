@@ -26,11 +26,11 @@
                 <ul class="navbar-nav ml-auto">
                     @if(!Auth::check())
                     <li class="nav-item">
-                        <a class="nav-link" href="page_login.html">Войти</a>
+                        <a class="nav-link" href="{{ route('login') }}">Войти</a>
                     </li>
                     @else
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Выйти</a>
+                        <a class="nav-link" href="{{ route('logout') }}">Выйти</a>
                     </li>
                     @endif
                 </ul>

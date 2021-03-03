@@ -16,9 +16,8 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(6);
-        $isAdmin = Auth::user()->admin;
 
-        return view('index', compact('users', 'isAdmin'));
+        return view('index', compact('users'));
     }
 
     /**
