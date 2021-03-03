@@ -36,9 +36,8 @@ class DBService
     public function getForSecurity($id)
     {
         return DB::table('users')
-            ->select('email')
+            ->select('id', 'email')
             ->where('id', $id)
-            ->first()
-            ->email;
+            ->first();
     }
 }

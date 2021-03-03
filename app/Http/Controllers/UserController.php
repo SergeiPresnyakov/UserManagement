@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\DBService;
 use App\Http\Requests\UserCommonInfoUpdateRequest;
+use App\Http\Requests\UserSecurityUpdateRequest;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {   
@@ -56,6 +58,43 @@ class UserController extends Controller
     }
 
     /**
+     * Edit user credentials form
+     * 
+     * @param int $id User ID
+     */
+    public function security($id)
+    {
+        $user = $this->db->getForSecurity($id);
+
+        return view('forms.security', compact('user'));
+    }
+
+    /**
+     * Set user status form
+     * 
+     * @param int $id User ID
+     */
+    public function status($id)
+    {
+        $currentStatus = $this->db->getUserStatus($id);
+
+        return view('forms.status', compact('currentStatus'));
+    }
+
+    /**
+     * Change user avatar form
+     * 
+     * @param int $id User ID
+     */
+    public function media($id)
+    {
+        $avatar = $this->db->getUserAvatar($id);
+
+        return view('forms.media', compact('avatar'));
+    }
+
+
+    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -92,27 +131,7 @@ class UserController extends Controller
         return view('forms.edit', compact('user'));
     }
 
-    public function security($id)
-    {
-        $email = $this->db->getForSecurity($id);
-
-        return view('forms.security', compact('email'));
-    }
-
-    public function status($id)
-    {
-        $currentStatus = $this->db->getUserStatus($id);
-
-        return view('forms.status', compact('currentStatus'));
-    }
-
-    public function media($id)
-    {
-        $avatar = $this->db->getUserAvatar($id);
-
-        return view('forms.media', compact('avatar'));
-    }
-
+    
     /**
      * Update the specified resource in storage.
      *
@@ -131,12 +150,29 @@ class UserController extends Controller
         $savedUser = $user->save();
         $savedInfo = $user->info->save();
 
-        if ($savedUser) {
-            return back()
-                ->with('success', 'Данные обновлены');
+        if ($savedUser && $savedInfo) {
+            return back()->with('success', 'Данные обновлены');
         } else {
-            return back()
-                ->withErrors('Ошибка обновления');
+            return back()->withErrors('Ошибка обновления');
+        }
+    }
+
+    /**
+     * Update user credentials
+     * 
+     * @param App\Http\Requests\UserSecurityUpdateRequest $request
+     * @param int $id User ID
+     */
+    public function securityUpdate(UserSecurityUpdateRequest $request, $id)
+    {
+        $user = $this->user->find($id);
+        $user->email = $request->email;
+        $user->password = Hash::make($request->password);
+
+        if ($user->save()) {
+            return back()->with('success', 'Учётные данные обновлены');
+        } else {
+            return back()->withErrors('Не удалось обновить учётные данные');
         }
     }
 
