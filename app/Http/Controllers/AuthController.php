@@ -55,14 +55,15 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $rememberMe)) {
             $request->session()->regenerate();
             
-            return redirect()
-                ->route('index');
+            return redirect()->route('index');
         }
 
-        return back()
-            ->withErrors('Неверный email или пароль');
+        return back()->withErrors('Неверный email или пароль');
     }
 
+    /**
+     * Authenticated user logout
+     */
     public function logout(Request $request)
     {
         Auth::logout();

@@ -26,17 +26,21 @@ Route::get('user/{id}/profile', [UserController::class, 'show'])->name('user.pro
 // Только авторизованному пользователю
 Route::group(['middleware' => 'auth', 'prefix' => 'user'], function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('{id}/edit', [UserController::class, 'edit'])->name('user.edit');
-    Route::get('{id}/contacts', [UserController::class, 'contacts'])->name('user.contacts');
-    Route::patch('{id}/contacts/update', [UserController::class, 'updateContacts'])->name('user.contacts.update');
-    Route::get('{id}/security', [UserController::class, 'security'])->name('user.security');
-    Route::get('{id}/status', [UserController::class, 'status'])->name('user.status');
-    Route::patch('{id}/status/update', [UserController::class, 'setStatus'])->name('user.status.update');
-    Route::get('{id}/media', [UserController::class, 'media'])->name('user.media');
-    Route::patch('{id}/commoninfo/update', [UserController::class, 'commonInfoUpdate'])->name('user.commoninfo.update');
-    Route::patch('{id}/security/update', [UserController::class, 'securityUpdate'])->name('user.security.update');
-    Route::post('{id}/avatar/update', [UserController::class, 'avatarUpdate'])->name('user.avatar.update');
-    Route::delete('{id}/delete', [UserController::class, 'destroy'])->name('user.delete');
+
+    // Админу для всех. Пользователю только для себя
+    Route::group(['middleware' => 'security'], function () {
+        Route::get('{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+        Route::get('{id}/contacts', [UserController::class, 'contacts'])->name('user.contacts');
+        Route::patch('{id}/contacts/update', [UserController::class, 'updateContacts'])->name('user.contacts.update');
+        Route::get('{id}/security', [UserController::class, 'security'])->name('user.security');
+        Route::get('{id}/status', [UserController::class, 'status'])->name('user.status');
+        Route::patch('{id}/status/update', [UserController::class, 'setStatus'])->name('user.status.update');
+        Route::get('{id}/media', [UserController::class, 'media'])->name('user.media');
+        Route::patch('{id}/commoninfo/update', [UserController::class, 'commonInfoUpdate'])->name('user.commoninfo.update');
+        Route::patch('{id}/security/update', [UserController::class, 'securityUpdate'])->name('user.security.update');
+        Route::post('{id}/avatar/update', [UserController::class, 'avatarUpdate'])->name('user.avatar.update');
+        Route::delete('{id}/delete', [UserController::class, 'destroy'])->name('user.delete');
+    });
 
     // Только админу
     Route::group(['middleware' => 'admin'], function () {

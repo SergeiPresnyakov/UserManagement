@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserAvatarUpdateRequest;
-use App\Models\User;
-use App\Models\UserInfo;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use App\Services\DBService;
 use App\Http\Requests\UserCommonInfoUpdateRequest;
 use App\Http\Requests\UserContactsUpdateRequest;
 use App\Http\Requests\UserSecurityUpdateRequest;
+use App\Models\User;
+use App\Models\UserInfo;
+use Illuminate\Http\Request;
+use App\Services\DBService;
 use App\Services\ImageService;
 use Illuminate\Support\Facades\Hash;
 
@@ -119,7 +118,7 @@ class UserController extends Controller
     {   
         $avatar = $request->file('avatar');
         $user = User::create([
-            'name' => $request->name ?? null,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'status' => $request->status,
@@ -128,22 +127,18 @@ class UserController extends Controller
 
         $info = UserInfo::create([
             'user_id' => $user->id,
-            'job' => $request->job ?? null,
-            'phone' => $request->phone ?? null,
-            'address' => $request->address ?? null,
-            'vk' => $request->vk ?? null,
-            'telegram' => $request->telegram ?? null,
-            'instagram' => $request->instagram ?? null
+            'job' => $request->job,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'vk' => $request->vk,
+            'telegram' => $request->telegram,
+            'instagram' => $request->instagram
          ]);
+         
 
-         if ($user && $info) {
-             return redirect()
-                ->route('index')
-                ->with('success', 'Создан новый пользователь');
-         } else {
-             return back()
-                ->withErrors('Не удалось создать пользователя');
-         }
+         return ($user && $info) ?
+            redirect()->route('index')->with('success', 'Создан новый пользователь') : 
+            back()->withErrors('Не удалось создать пользователя');
     }
 
     /**
@@ -166,7 +161,7 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
+    {   
         $user = $this->db->getForEdit($id);
 
         return view('forms.edit', compact('user'));
@@ -183,19 +178,17 @@ class UserController extends Controller
     public function commonInfoUpdate(UserCommonInfoUpdateRequest $request, $id)
     {
         $user = $this->user->find($id);
-        $user->name = $request->name;
-        $user->info->job = $request->job;
-        $user->info->phone = $request->phone;
-        $user->info->address = $request->address;
 
-        $savedUser = $user->save();
-        $savedInfo = $user->info->save();
+        $savedUser = $user->update(['name' => $request->name]);
+        $savedInfo = $user->info->update([
+            'job' => $request->job,
+            'phone' => $request->phone,
+            'address' => $request->address
+        ]);
 
-        if ($savedUser && $savedInfo) {
-            return back()->with('success', 'Данные обновлены');
-        } else {
-            return back()->withErrors('Ошибка обновления');
-        }
+        return ($savedUser && $savedInfo) ?
+            back()->with('success', 'Данные обновлены') : 
+            back()->withErrors('Ошибка обновления');
     }
 
     /**
@@ -207,14 +200,15 @@ class UserController extends Controller
     public function securityUpdate(UserSecurityUpdateRequest $request, $id)
     {
         $user = $this->user->find($id);
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-
-        if ($user->save()) {
-            return back()->with('success', 'Учётные данные обновлены');
-        } else {
-            return back()->withErrors('Не удалось обновить учётные данные');
-        }
+        
+        $updated = $user->update([
+            'email' => $request->email,
+            'password' => Hash::make($request->password)
+        ]);
+      
+        return $updated ?
+            back()->with('success', 'Учётные данные обновлены') : 
+            back()->withErrors('Не удалось обновить учётные данные');
     }
 
     /**
@@ -231,11 +225,9 @@ class UserController extends Controller
             'instagram' => $request->instagram
         ]);
 
-        if ($isUpdated) {
-            return back()->with('success', 'Ссылки на соцсети были обновлены');
-        } else {
-            return back()->withErrors('Не удалось обновить ссылки на соцсети');
-        }
+        return $isUpdated ?
+            back()->with('success', 'Ссылки на соцсети были обновлены') : 
+            back()->withErrors('Не удалось обновить ссылки на соцсети');
     }
 
     /**
@@ -249,11 +241,9 @@ class UserController extends Controller
         $user = $this->user->find($id);
         $isUpdated = $user->update(['status' => $request->status]);
 
-        if ($isUpdated) {
-            return back()->with('success', 'Статус обновлён');
-        } else {
-            return back()->withErrors('Не удалось сменить статус');
-        }
+        return $isUpdated ?
+            back()->with('success', 'Статус обновлён') : 
+            back()->withErrors('Не удалось сменить статус');
     }
 
     /**
@@ -270,17 +260,13 @@ class UserController extends Controller
         }
 
         $file = $request->file('avatar');
-        $isUpdated = $this
-            ->user
+        $isUpdated = $this->user
             ->find($id)
             ->update(['avatar' => ImageService::updateAvatar($file, $id)]);
 
-        if ($isUpdated) {
-            return back()->with('success', 'Аватар обновлён');
-        } else {
-            return back()->withErrors('Не удалось сменить аватар');
-        }
-        
+        return $isUpdated ?
+            back()->with('success', 'Аватар обновлён') :
+            back()->withErrors('Не удалось сменить аватар'); 
     }
 
     /**
@@ -297,10 +283,8 @@ class UserController extends Controller
         $infoDeleted = $user->info->destroy($id);
         $userDeleted = $user->destroy($id);
 
-        if ($infoDeleted && $userDeleted) {
-            return back()->with('success', 'Пользователь удалён');
-        } else {
-            return back()->withErrors('Не удалось удалить пользователя');
-        }
+        return ($infoDeleted && $userDeleted) ?
+            back()->with('success', 'Пользователь удалён') : 
+            back()->withErrors('Не удалось удалить пользователя');
     }
 }
