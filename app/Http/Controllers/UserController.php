@@ -257,6 +257,16 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = $this->user->find($id);
+        ImageService::delete($user->avatar);
+
+        $infoDeleted = $user->info->destroy($id);
+        $userDeleted = $user->destroy($id);
+
+        if ($infoDeleted && $userDeleted) {
+            return back()->with('success', 'Пользователь удалён');
+        } else {
+            return back()->withErrors('Не удалось удалить пользователя');
+        }
     }
 }

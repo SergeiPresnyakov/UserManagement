@@ -77,10 +77,14 @@
                                         <i class="fa fa-camera"></i>
                                         Загрузить аватар
                                     </a>
-                                    <a href="#" class="dropdown-item" onclick="return confirm('are you sure?');">
-                                        <i class="fa fa-window-close"></i>
-                                        Удалить
-                                    </a>
+                                    <form action="{{ route('user.delete', ['id' => $user->id]) }}" method="post">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                            <i class="fa fa-window-close"></i>
+                                            Удалить
+                                        </button>
+                                    </form>
                                 </div>
                                 @endif
                                 <span class="text-truncate text-truncate-xl">{{ $user->info->job }}</span>
