@@ -17,15 +17,15 @@ class AdminSeeder extends Seeder
     public function run()
     {
         $user = User::create([
-            'email' => 'somemail@gmail.com',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('12345678'),
             'admin' => 1,
-            'name' => 'Sergey'
+            'name' => 'Admin'
         ]);
 
         UserInfo::create([
             'user_id' => $user->id,
-            'phone' => '+7 890 234 3445',
+            'phone' => '+7 999 999 99 99',
             'job' => 'Administrator',
             'address' => 'Irkutsk, Russia'
         ]);

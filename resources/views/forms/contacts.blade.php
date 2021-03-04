@@ -33,7 +33,7 @@
                                         </span>
                                     </span>
                                 </div>
-                                <input type="text" class="form-control border-left-0 bg-transparent pl-0" name="vk" value="{{ $contacts->vk }}">
+                                <input type="text" class="form-control border-left-0 bg-transparent pl-0" name="vk" value="{{ $contacts->vk ?? '' }}">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -49,7 +49,7 @@
                                         </span>
                                     </span>
                                 </div>
-                                <input type="text" class="form-control border-left-0 bg-transparent pl-0" name="telegram" value="{{ $contacts->telegram }}">
+                                <input type="text" class="form-control border-left-0 bg-transparent pl-0" name="telegram" value="{{ $contacts->telegram ?? '' }}">
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -65,7 +65,7 @@
                                         </span>
                                     </span>
                                 </div>
-                                <input type="text" class="form-control border-left-0 bg-transparent pl-0" name="instagram" value="{{ $contacts->instagram }}">
+                                <input type="text" class="form-control border-left-0 bg-transparent pl-0" name="instagram" value="{{ $contacts->instagram ?? '' }}">
                             </div>
                         </div>
 
