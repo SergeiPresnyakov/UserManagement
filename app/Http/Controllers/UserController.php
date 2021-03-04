@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Services\DBService;
 use App\Http\Requests\UserCommonInfoUpdateRequest;
+use App\Http\Requests\UserContactsUpdateRequest;
 use App\Http\Requests\UserSecurityUpdateRequest;
 use App\Services\ImageService;
 use Illuminate\Support\Facades\Hash;
@@ -69,6 +70,18 @@ class UserController extends Controller
         $email = $this->db->getUserEmail($id);
 
         return view('forms.security', compact('email', 'id'));
+    }
+
+    /**
+     * User contacts form
+     * 
+     * @param int $id User ID
+     */
+    public function contacts($id)
+    {
+        $contacts = $this->db->getUserContacts($id);
+
+        return view('forms.contacts', compact('contacts', 'id'));
     }
 
     /**
@@ -201,6 +214,27 @@ class UserController extends Controller
             return back()->with('success', 'Учётные данные обновлены');
         } else {
             return back()->withErrors('Не удалось обновить учётные данные');
+        }
+    }
+
+    /**
+     * User social networks links update
+     * 
+     * @param App\Http\Requests\UserContactsUpdateRequest $request
+     * @param int $id User ID
+     */
+    public function updateContacts(UserContactsUpdateRequest $request, $id)
+    {
+        $isUpdated = $this->user->find($id)->info->update([
+            'vk' => $request->vk,
+            'telegram' => $request->telegram,
+            'instagram' => $request->instagram
+        ]);
+
+        if ($isUpdated) {
+            return back()->with('success', 'Ссылки на соцсети были обновлены');
+        } else {
+            return back()->withErrors('Не удалось обновить ссылки на соцсети');
         }
     }
 

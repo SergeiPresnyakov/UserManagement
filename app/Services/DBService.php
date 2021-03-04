@@ -41,4 +41,12 @@ class DBService
             ->first()
             ->email;
     }
+
+    public function getUserContacts($id)
+    {
+        return DB::table('users_info')
+            ->select(['vk', 'telegram', 'instagram'])
+            ->where('id', $id)
+            ->first();
+    }
 }

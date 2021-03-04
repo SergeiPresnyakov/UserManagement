@@ -69,18 +69,21 @@
                                     Редактировать</a>
                                     <a class="dropdown-item" href="{{ route('user.security', ['id' => $user->id]) }}">
                                         <i class="fa fa-lock"></i>
-                                    Безопасность</a>
+                                    Безопастность</a>
+                                    <a class="dropdown-item" href="{{ route('user.contacts', ['id' => $user->id]) }}">
+                                        <i class="fa fa-address-card"></i>
+                                    Контакты</a>
                                     <a class="dropdown-item" href="{{ route('user.status', ['id' => $user->id]) }}">
                                         <i class="fa fa-sun"></i>
                                     Установить статус</a>
                                     <a class="dropdown-item" href="{{ route('user.media', ['id' => $user->id]) }}">
                                         <i class="fa fa-camera"></i>
-                                        Загрузить аватар
+                                    Загрузить аватар
                                     </a>
                                     <form action="{{ route('user.delete', ['id' => $user->id]) }}" method="post">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                        <button type="submit" class="dropdown-item" onclick="return confirm('Удалить этого пользователя?');">
                                             <i class="fa fa-window-close"></i>
                                             Удалить
                                         </button>

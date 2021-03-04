@@ -27,6 +27,8 @@ Route::get('user/{id}/profile', [UserController::class, 'show'])->name('user.pro
 Route::group(['middleware' => 'auth', 'prefix' => 'user'], function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('{id}/edit', [UserController::class, 'edit'])->name('user.edit');
+    Route::get('{id}/contacts', [UserController::class, 'contacts'])->name('user.contacts');
+    Route::patch('{id}/contacts/update', [UserController::class, 'updateContacts'])->name('user.contacts.update');
     Route::get('{id}/security', [UserController::class, 'security'])->name('user.security');
     Route::get('{id}/status', [UserController::class, 'status'])->name('user.status');
     Route::patch('{id}/status/update', [UserController::class, 'setStatus'])->name('user.status.update');
