@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserAvatarUpdateRequest;
 use App\Models\User;
 use App\Models\UserInfo;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\DBService;
 use App\Http\Requests\UserCommonInfoUpdateRequest;
 use App\Http\Requests\UserSecurityUpdateRequest;
+use App\Services\ImageService;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -90,7 +92,7 @@ class UserController extends Controller
     {
         $avatar = $this->db->getUserAvatar($id);
 
-        return view('forms.media', compact('avatar'));
+        return view('forms.media', compact('avatar', 'id'));
     }
 
 
@@ -192,6 +194,33 @@ class UserController extends Controller
         } else {
             return back()->withErrors('Не удалось сменить статус');
         }
+    }
+
+    /**
+     * Upload new user avatar
+     * Deletes the old one, except default avatar
+     * 
+     * @param App\Http\Requests\UserAvatarUpdateRequest $request
+     * @param int $id User ID
+     */
+    public function avatarUpdate(UserAvatarUpdateRequest $request, $id)
+    {
+        if ($request->file('avatar') === null) {
+            return back();
+        }
+
+        $file = $request->file('avatar');
+        $isUpdated = $this
+            ->user
+            ->find($id)
+            ->update(['avatar' => ImageService::updateAvatar($file, $id)]);
+
+        if ($isUpdated) {
+            return back()->with('success', 'Аватар обновлён');
+        } else {
+            return back()->withErrors('Не удалось сменить аватар');
+        }
+        
     }
 
     /**

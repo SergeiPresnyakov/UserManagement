@@ -2,13 +2,15 @@
 
 @section('content')
     <main id="js-page-content" role="main" class="page-content mt-3">
+        @include('includes.messages')
         <div class="subheader">
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-image'></i> Загрузить аватар
             </h1>
 
         </div>
-        <form action="">
+        <form action="{{ route('user.avatar.update', ['id' => $id]) }}" enctype="multipart/form-data" method="post">
+            @csrf
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -22,8 +24,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label" for="example-fileinput">Выберите аватар</label>
-                                    <input type="file" id="example-fileinput" class="form-control-file">
+                                    <label class="form-label" for="avatar">Выберите аватар</label>
+                                    <input type="file" id="avatar" name="avatar" class="form-control-file">
                                 </div>
 
 
