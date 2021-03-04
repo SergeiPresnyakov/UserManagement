@@ -103,8 +103,34 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        $avatar = $request->file('avatar');
+        $user = User::create([
+            'name' => $request->name ?? null,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'status' => $request->status,
+            'avatar' => $avatar ? ImageService::uploadAvatar($avatar) : ImageService::DEFAULT_AVATAR
+        ]);
+
+        $info = UserInfo::create([
+            'user_id' => $user->id,
+            'job' => $request->job ?? null,
+            'phone' => $request->phone ?? null,
+            'address' => $request->address ?? null,
+            'vk' => $request->vk ?? null,
+            'telegram' => $request->telegram ?? null,
+            'instagram' => $request->instagram ?? null
+         ]);
+
+         if ($user && $info) {
+             return redirect()
+                ->route('index')
+                ->with('success', 'Создан новый пользователь');
+         } else {
+             return back()
+                ->withErrors('Не удалось создать пользователя');
+         }
     }
 
     /**

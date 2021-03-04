@@ -34,7 +34,11 @@ Route::group(['middleware' => 'auth', 'prefix' => 'user'], function () {
     Route::patch('{id}/commoninfo/update', [UserController::class, 'commonInfoUpdate'])->name('user.commoninfo.update');
     Route::patch('{id}/security/update', [UserController::class, 'securityUpdate'])->name('user.security.update');
     Route::post('{id}/avatar/update', [UserController::class, 'avatarUpdate'])->name('user.avatar.update');
+    
     // Только админу
-    Route::get('/create', [UserController::class, 'create'])->middleware('admin')->name('user.create');
+    Route::group(['middleware' => 'admin'], function () {
+        Route::get('/create', [UserController::class, 'create'])->name('user.create');
+        Route::post('/create', [UserController::class, 'store'])->name('user.store');
+    });
 });
 

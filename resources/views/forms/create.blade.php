@@ -2,6 +2,7 @@
 
 @section('content')
     <main id="js-page-content" role="main" class="page-content mt-3">
+        @include('includes.messages')
         <div class="subheader">
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-plus-circle'></i> Добавить пользователя
@@ -10,7 +11,8 @@
 
 
         </div>
-        <form action="">
+        <form action="{{ route('user.store') }}" method="post" enctype="multipart/form-data">
+            @csrf
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -21,26 +23,26 @@
                             <div class="panel-content">
                                 <!-- username -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Имя</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <label class="form-label" for="name">Имя</label>
+                                    <input type="text" id="name" name="name" class="form-control">
                                 </div>
 
                                 <!-- title -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Место работы</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <label class="form-label" for="job">Место работы</label>
+                                    <input type="text" id="job" name="job" class="form-control">
                                 </div>
 
                                 <!-- tel -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Номер телефона</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <label class="form-label" for="phone">Номер телефона</label>
+                                    <input type="text" id="phone" name="phone" class="form-control">
                                 </div>
 
                                 <!-- address -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Адрес</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <label class="form-label" for="address">Адрес</label>
+                                    <input type="text" id="address" name="address" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -56,30 +58,30 @@
                             <div class="panel-content">
                                 <!-- email -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Email</label>
-                                    <input type="text" id="simpleinput" class="form-control">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input type="text" id="email" name="email" class="form-control">
                                 </div>
 
                                 <!-- password -->
                                 <div class="form-group">
-                                    <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <label class="form-label" for="password">Пароль</label>
+                                    <input type="password" id="password" name="password" class="form-control">
                                 </div>
 
                                 
                                 <!-- status -->
                                 <div class="form-group">
-                                    <label class="form-label" for="example-select">Выберите статус</label>
-                                    <select class="form-control" id="example-select">
-                                        <option>Онлайн</option>
-                                        <option>Отошел</option>
-                                        <option>Не беспокоить</option>
+                                    <label class="form-label" for="status">Выберите статус</label>
+                                    <select class="form-control" id="status" name="status">
+                                        <option value="online">Онлайн</option>
+                                        <option value="away">Отошёл</option>
+                                        <option value="busy">Не беспокоить</option>
                                     </select>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="form-label" for="example-fileinput">Загрузить аватар</label>
-                                    <input type="file" id="example-fileinput" class="form-control-file">
+                                    <label class="form-label" for="avatar">Загрузить аватар</label>
+                                    <input type="file" id="avatar" name="avatar" class="form-control-file">
                                 </div>
                             </div>
                         </div>
@@ -106,7 +108,7 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                            <input type="text" name="vk" class="form-control border-left-0 bg-transparent pl-0">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -120,7 +122,7 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                            <input type="text" name="telegram" class="form-control border-left-0 bg-transparent pl-0">
                                         </div>
                                     </div>
                                     <div class="col-md-4">
@@ -134,7 +136,7 @@
                                                     </span>
                                                 </span>
                                             </div>
-                                            <input type="text" class="form-control border-left-0 bg-transparent pl-0">
+                                            <input type="text" name="instagram" class="form-control border-left-0 bg-transparent pl-0">
                                         </div>
                                     </div>
                                     <div class="col-md-12 mt-3 d-flex flex-row-reverse">

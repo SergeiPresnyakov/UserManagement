@@ -47,9 +47,4 @@ class User extends Authenticatable
     {
         return $this->hasOne('App\Models\UserInfo');
     }
-
-    public function contacts()
-    {
-        return $this->hasOne('App\Models\UserContacts');
-    }
 }

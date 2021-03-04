@@ -27,6 +27,18 @@ class ImageService
     }
 
     /**
+     * Upload new user avatar
+     * 
+     * @param UploadedFile $file New avatar
+     * 
+     * @return string New avatar name
+     */
+    public static function uploadAvatar($file)
+    {
+        return $file->store(self::AVATARS_PATH);
+    }
+
+    /**
      * Delete file by filename.
      * Default avatar is preserved.
      * 
